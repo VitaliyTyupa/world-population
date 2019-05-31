@@ -1,0 +1,34 @@
+<mat-sidenav-container fullscreen>
+  <mat-sidenav #sidenav mode="push" class="app-sidenav">
+    <mat-toolbar color="primary">
+      <!--future svg to go here-->
+      <span class="toolbar-filler"></span>
+      <button mat-icon-button (click)="sidenav.toggle()" class="mat-icon-button sidenav-toggle-button"
+              [hidden]="!sidenav.opened">
+        <mat-icon aria-label="Menu" class="material-icons">close</mat-icon>
+      </button>
+    </mat-toolbar>
+    <mat-nav-list>
+      <a mat-list-item class="sidenav-link" (click)="sidenav.toggle()">
+        <mat-icon mat-list-icon>account_balance</mat-icon>
+        <span class="title" mat-line>comp1</span>
+        <span mat-line class="secondary">test</span>
+      </a>
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <mat-toolbar id="appToolbar" color="primary">
+      <button mat-icon-button (click)="sidenav.toggle()" class="mat-icon-button sidenav-toggle-button"
+              [hidden]="sidenav.opened">
+        <mat-icon aria-label="Menu" class="material-icons">menu</mat-icon>
+      </button>
+      <h1 class="component-title">
+        <a class="title-link">World population</a>
+      </h1>
+      <span class="toolbar-filler"></span>
+      <button id="button-logout" mat-button>Log Out</button>
+    </mat-toolbar>
+    <wp-bubble-chart></wp-bubble-chart>
+  </mat-sidenav-content>
+</mat-sidenav-container>
