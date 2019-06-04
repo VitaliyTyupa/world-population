@@ -1,7 +1,7 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {MatFormFieldModule, MatInputModule} from '@angular/material';
+import {MatButtonModule, MatFormFieldModule, MatInputModule} from '@angular/material';
 
 import { RegistrationComponent } from './registration/registration.component';
 import { AuthComponent } from './auth.component';
@@ -25,7 +25,8 @@ import {SharedModule} from '../shared/shared.module';
     AuthRoutingModule,
     SharedModule,
     MatFormFieldModule,
-    MatInputModule
+    MatInputModule,
+    MatButtonModule
   ]
 })
 
