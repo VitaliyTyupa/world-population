@@ -1,0 +1,48 @@
+<h1 class="sign-in-header">Авторизация</h1>
+<form class="sign-in-form-group" [formGroup]="form" (ngSubmit)="onSubmit()">
+
+
+  <mat-form-field appearance="outline"
+                  [ngClass]="{'has-error': form.get('email').invalid && form.get('email').touched}">
+    <mat-label>Почта</mat-label>
+    <input matInput
+           type="text"
+           placeholder="Введите свой адрес електронной почты"
+           formControlName="email">
+    <mat-hint *ngIf="form.get('email').invalid && form.get('email').touched">
+      <span *ngIf="form.get('email')['errors']['required']">Адрес електронной почты не может быть пустым </span>
+      <span *ngIf="form.get('email')['errors']['email']">ВВедите коректный адрес електронной почты!</span>
+    </mat-hint>
+  </mat-form-field>
+
+
+  <mat-form-field appearance="outline"
+                  [ngClass]="{'has-error': form.get('password').invalid && form.get('password').touched}">
+    <mat-label>Пароль</mat-label>
+    <input matInput
+           type="password"
+           placeholder="Введите свой пароль"
+           formControlName="password">
+    <mat-hint class="form-help-text" *ngIf="form.get('password').invalid && form.get('password').touched">
+      <span *ngIf="form.get('password')['errors']['required']">Пароль не может быть пустым!</span>
+      <span *ngIf="form.get('password')['errors']['minlength']">
+        Ввведеный пароль должен быть не менее {{form.get('password')['errors']['minlength']['requiredLength']}} символов!
+        Сейчас {{form.get('password')['errors']['minlength']['actualLength']}}.
+      </span>
+    </mat-hint>
+  </mat-form-field>
+
+  <button mat-raised-button
+          type="submit"
+          class="btn-submit"
+          [disabled]="form.invalid">
+    Проверить
+  </button>
+
+  <p class="invitation-to-registration">
+    У Вас нет еще своего аакаунта?
+    <a routerLink="/auth/registration">Зарегистрироваться</a>
+  </p>
+
+  <wp-notification *ngIf="error.isShow">{{error.message}}</wp-notification>
+</form>

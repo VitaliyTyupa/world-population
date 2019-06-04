@@ -1,0 +1,76 @@
+<header class="sign-up-header">
+  <span>Регистрация</span>
+  <span>Создайте свой профиль и сохраняйте свой прогресс</span>
+</header>
+
+<form class="sign-up-form-group" [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+
+  <mat-form-field appearance="outline"
+                  [ngClass]="{'has-error': profileForm.get('logName').invalid && profileForm.get('logName').touched}">
+    <mat-label>Login</mat-label>
+    <input matInput
+           type="text"
+           placeholder="enter your login"
+           formControlName="logName">
+    <mat-hint *ngIf="profileForm.get('logName').invalid && profileForm.get('logName').touched">
+      <span *ngIf="profileForm.get('logName')['errors']['required']">Email can not be empty!</span>
+      <span *ngIf="profileForm.get('logName')['errors']['minLength']">Enter name</span>
+    </mat-hint>
+  </mat-form-field>
+  <mat-form-field appearance="outline"
+                  [ngClass]="{'has-error': profileForm.get('email').invalid && profileForm.get('email').touched}">
+    <mat-label>E-mail</mat-label>
+    <input matInput
+           type="text"
+           placeholder="enter your email"
+           formControlName="email">
+    <mat-hint *ngIf="profileForm.get('email').invalid && profileForm.get('email').touched">
+      <span *ngIf="profileForm.get('email')['errors']['required']">Email can not be empty!</span>
+      <span *ngIf="profileForm.get('email')['errors']['email']">Enter correct email!</span>
+    </mat-hint>
+  </mat-form-field>
+
+
+  <mat-form-field appearance="outline"
+                  [ngClass]="{'has-error': profileForm.get('password').invalid && profileForm.get('password').touched}">
+    <mat-label>Password</mat-label>
+    <input matInput
+           type="password"
+           placeholder="Password"
+           formControlName="password">
+    <mat-hint class="form-help-text" *ngIf="profileForm.get('password').invalid && profileForm.get('password').touched">
+      <span *ngIf="profileForm.get('password')['errors']['profileFormrequired']">Password can not be empty!</span>
+      <span *ngIf="profileForm.get('password')['errors']['minlength']">
+        Enter password must be more longer than {{profileForm.get('password')['errors']['minlength']['requiredLength']}} chars!
+        Now {{profileForm.get('password')['errors']['minlength']['actualLength']}}.
+      </span>
+    </mat-hint>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline"
+                  [ngClass]="{'has-error': profileForm.get('password').invalid && profileForm.get('password').touched}">
+    <mat-label>Confirm password</mat-label>
+    <input matInput
+           type="password"
+           placeholder="Confirm password"
+           formControlName="confirmPassword">
+    <mat-hint class="form-help-text" *ngIf="profileForm.get('confirmPassword').invalid && profileForm.get('confirmPassword').touched">
+      <span *ngIf="profileForm.get('confirmPassword')['errors']['profileFormrequired']">Password can not be empty!</span>
+      <span *ngIf="profileForm.get('confirmPassword')['errors']['minlength']">
+        Enter password must be more longer than {{profileForm.get('confirmPassword')['errors']['minlength']['requiredLength']}} chars!
+        Now {{profileForm.get('confirmPassword')['errors']['minlength']['actualLength']}}.
+      </span>
+    </mat-hint>
+  </mat-form-field>
+
+  <button mat-raised-button
+          type="submit"
+          class="btn-submit"
+          [disabled]="profileForm.invalid">
+    Enter
+  </button>
+
+  <p class="back-to-start-page">
+    <a routerLink="/">На главную страницу</a>
+  </p>
+</form>
