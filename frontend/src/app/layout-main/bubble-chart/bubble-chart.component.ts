@@ -134,10 +134,10 @@ export class BubbleChartComponent implements OnInit {
 // function called once promise is resolved and data is loaded from csv
 // calls bubble chart function to display inside #vis div
     function initData(data) {
-      this.data = data.map(item => {
+      const newData = data.map(item => {
         return {name: item.name, population: item.population, region: item.region};
       });
-      console.log(this.data);
+      console.log(newData);
     }
 
 // load data
