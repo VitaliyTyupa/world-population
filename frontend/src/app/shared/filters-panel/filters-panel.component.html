@@ -1,0 +1,38 @@
+<section class="filters-container">
+ <header class="filters-header">
+     <button mat-icon-button class="close ripple" (click)="closeFilter()">
+       <i class="material-icons">
+         close
+       </i>
+     </button>
+ </header>
+    <div class="action-buttons">
+        <div class="group-left">
+            <button mat-stroked-button class="filters-button" disabled>
+              <mat-icon mat-list-icon>material-icons</mat-icon>
+                Filters
+            </button>
+          <mat-form-field>
+            <label for="period-selection"></label>
+            <mat-select name="select" id="period-selection" [(ngModel)]="timeSelection" (change)="selectTimesPeriod()">
+              <mat-option value="0">All Time</mat-option>
+              <mat-option value="7" >Last Week</mat-option>
+              <mat-option value="30">Last Month</mat-option>
+              <mat-option value="90">Last 3 Months</mat-option>
+              <mat-option value="180">Last 6 Months</mat-option>
+              <mat-option value="365">Last 12 Months</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+            <button mat-button class="clear-button ripple" (click)="clearFilters()">Clear</button>
+        </div>
+        <div class="group-right">
+            <button mat-button class="negotiators">Negotiators: 145</button>
+            <button mat-raised-button class="apply-button ripple" [ngClass]="{'applied' : isApplied}" (click)="applyFilters()">Apply</button>
+        </div>
+
+    </div>
+  <div class="filters-bar">
+      <wp-filter *ngFor="let group of filterGroups" [group]="group"></wp-filter>
+  </div>
+</section>
