@@ -14,11 +14,11 @@
                     <li class="selected" *ngFor="let key Of group.filterKeys" (click)="unselect(key)">
                         <span *ngIf="group.groupName === 'date'" [class]="group.groupName">
                         {{key | date: 'd MMM y'}}
-                            <i class="fa fa-times-circle"></i>
+                          <mat-icon>cancel</mat-icon>
                     </span>
                         <span *ngIf="group.groupName !== 'date'" [class]="group.groupName">
                         {{key}}
-                            <i class="fa fa-times-circle"></i>
+                          <mat-icon>cancel</mat-icon>
                     </span>
 
                     </li>

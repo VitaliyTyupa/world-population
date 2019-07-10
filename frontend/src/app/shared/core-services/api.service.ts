@@ -24,14 +24,14 @@ export class ApiService {
       )
   }
 
-  getAllLessons(): Observable<any> {
-    return this.httpClient.get(`${this.configURL}/lessons`)
+  getAllCountries(): Observable<any> {
+    return this.httpClient.get(`https://restcountries.eu/rest/v2/all`)
       .pipe(
-        map(lessons => {
-          if (lessons) {
-            return lessons;
+        map(countries => {
+          if (countries) {
+            return countries;
           } else {
-            throw new Error(`нет уроков для отображения`);
+            throw new Error(`нет информации по Вашему запросу`);
           }
         })
       )

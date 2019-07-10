@@ -1,16 +1,16 @@
 <mat-sidenav-container fullscreen>
-  <mat-sidenav #sidenav mode="push" class="app-sidenav">
+  <mat-sidenav #sidenav mode="push" class="app-sidenav" [opened]="isOpened">
     <mat-toolbar color="primary">
       <!--future svg to go here-->
       <span class="toolbar-filler"></span>
-      <button mat-icon-button (click)="sidenav.toggle()" class="mat-icon-button sidenav-toggle-button"
+      <button mat-icon-button (click)="closeSideNav()" class="mat-icon-button sidenav-toggle-button"
               [hidden]="!sidenav.opened">
         <mat-icon aria-label="Menu" class="material-icons">close</mat-icon>
       </button>
     </mat-toolbar>
     <mat-nav-list>
-      <a mat-list-item class="sidenav-link" (click)="sidenav.toggle()">
-        <mat-icon mat-list-icon>account_balance</mat-icon>
+      <a mat-list-item class="sidenav-link" (click)="openFilters()">
+        <mat-icon mat-list-icon class="material-icons">receipt</mat-icon>
         <span class="title" mat-line>Filters</span>
         <span mat-line class="secondary">choose categories</span>
       </a>
@@ -19,7 +19,7 @@
 
   <mat-sidenav-content>
     <mat-toolbar id="appToolbar" color="primary">
-      <button mat-icon-button (click)="sidenav.toggle()" class="mat-icon-button sidenav-toggle-button"
+      <button mat-icon-button (click)="openSideNav()" class="mat-icon-button sidenav-toggle-button"
               [hidden]="sidenav.opened">
         <mat-icon aria-label="Menu" class="material-icons">menu</mat-icon>
       </button>

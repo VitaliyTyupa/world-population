@@ -10,7 +10,7 @@ import {FiltersPanelService} from './filters-panel.service';
 export class FiltersPanelComponent implements OnInit {
 
   @HostBinding('style.display')
-  private filterDisplay: string = 'block';
+  public filterDisplay: string = 'none';
 
   public filterGroups: any;
   public timeSelection: any = 0;
@@ -33,13 +33,6 @@ export class FiltersPanelComponent implements OnInit {
    */
   public clearFilters(): void {
    this.filtersPanelService.clearFilters();
-  }
-
-  /**
-   *  Time range selection  for showing values
-   */
-  public selectTimesPeriod(): void {
-    this.filtersPanelService.changeTimePeriod(this.timeSelection);
   }
 
   /**

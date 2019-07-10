@@ -1,5 +1,5 @@
 :host {
-  width: 18%;
+  width: 50%;
 }
 .filter-container {
   &:hover {
@@ -22,7 +22,7 @@
   }
   .filter-content {
     font-family: sans-serif;
-    padding-bottom: 10px;
+    padding: 10px;
     .search-field {
       height: 40px;
       margin: 0 10px;
@@ -66,9 +66,11 @@
           &.selected {
             span {
               background: #E4EDF2;
-              i {
+              mat-icon {
                 color: #64777B;
                 margin-left: 5px;
+                vertical-align: middle;
+                font-size: 22px;
               }
             }
           }
