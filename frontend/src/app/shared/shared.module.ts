@@ -1,16 +1,19 @@
 import {NgModule} from '@angular/core';
 import {CoreServicesModule} from './core-services/core-services.module';
 import {NotificationModule} from './notification/notification.module';
+import {FiltersPanelModule} from './filters-panel/filters-panel.module';
 
 
 @NgModule ({
   imports: [
     CoreServicesModule,
-    NotificationModule
+    NotificationModule,
+    FiltersPanelModule
   ],
   exports: [
     CoreServicesModule,
-    NotificationModule
+    NotificationModule,
+    FiltersPanelModule
 ],
   declarations: []
 })

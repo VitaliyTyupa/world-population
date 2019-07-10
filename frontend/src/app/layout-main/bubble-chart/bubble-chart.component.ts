@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import * as d3 from 'd3';
+import {CountriesDataService, Country} from '../../shared/core-services/countries-data.service';
 
 @Component({
   selector: 'wp-bubble-chart',
@@ -8,32 +9,51 @@ import * as d3 from 'd3';
 })
 export class BubbleChartComponent implements OnInit {
 
-  private data: [];
+  private data: Array<Country> = [];
 
-  constructor() {
+  constructor(
+    private countriesDataService: CountriesDataService
+  ) {
   }
 
+  private initNodes(data) {
+    return data.length;
+  }
+
+
   ngOnInit() {
+    this.countriesDataService.$countries.subscribe(countries => {
+      console.log(countries);
+      this.data.length = 0;
+      this.data.push(...countries);
+      d3.select('svg').selectAll('circle').remove();
+      console.log(this.countriesDataService.regions);
+      this.drawChart(this.data, this.countriesDataService.regions);
+    });
+
+  }
+
+  private drawChart(data, regions) {
     const width = 1500;
     const height = 900;
     const padding = 1.5; // separation between same-color nodes
     const clusterPadding = 6; // separation between different-color nodes
     const maxRadius = 12;
 
-    const n = 600; // total number of nodes
-    const m = 10; // number of distinct clusters
+    const n = data.length; // total number of nodes
+    const m = regions.length; // number of distinct clusters
 
     const color = d3.scaleOrdinal(d3.schemeCategory10)
       .domain(d3.range(m));
 
-// The largest node for each cluster.
+    // The largest node for each cluster.
     const clusters = new Array(m);
 
-    const nodes = d3.range(n).map(() => {
+    const nodes = data.map(() => {
       const i = Math.floor(Math.random() * m);
       const r = Math.sqrt((i + 1) / m * -Math.log(Math.random())) * maxRadius;
       const d = {cluster: i, radius: r};
-      if (!clusters[i] || (r > clusters[i].radius)) clusters[i] = d;
+      if (!clusters[i] || (r > clusters[i].radius)) { clusters[i] = d; }
       return d;
     });
 
@@ -42,9 +62,9 @@ export class BubbleChartComponent implements OnInit {
         .key((d) => d.cluster)
         .entries(nodes)
     }, (d) => d.values)
-      .sum((d) => d.radius * d.radius)
+      .sum((d) => d.radius * d.radius);
 
-// Use the pack layout to initialize node positions.
+    // Use the pack layout to initialize node positions.
     d3.pack(root)
       .size([width, height]);
 
@@ -53,20 +73,20 @@ export class BubbleChartComponent implements OnInit {
       .force('collide', d3.forceCollide().radius(d => d.radius + 10))
       .on('tick', tick);
 
-    const svg = d3.select("svg")
-      .attr("width", width)
-      .attr("height", height);
+    const svg = d3.select('svg')
+      .attr('width', width)
+      .attr('height', height);
 
-    const node = svg.selectAll("circle")
+    const node = svg.selectAll('circle')
       .data(nodes)
-      .enter().append("circle")
-      .style("fill", (d) => color(d.cluster))
-//     .call(force.drag);
+      .enter().append('circle')
+      .style('fill', (d) => color(d.cluster));
+    //     .call(force.drag);
 
     node.transition()
       .duration(750)
       .delay((d, i) => i * 5)
-      .attrTween("r", (d) => {
+      .attrTween('r', (d) => {
         const i = d3.interpolate(0, d.radius);
         return (t) => d.radius = i(t);
       });
@@ -75,15 +95,15 @@ export class BubbleChartComponent implements OnInit {
       node
         .each(cluster(.2))
         .each(collide(.5))
-        .attr("cx", (d) => d.x)
-        .attr("cy", (d) => d.y);
+        .attr('cx', (d) => d.x)
+        .attr('cy', (d) => d.y);
     }
 
-// Move d to be adjacent to the cluster node.
+    // Move d to be adjacent to the cluster node.
     function cluster(alpha) {
       return (d) => {
         const cluster = clusters[d.cluster];
-        if (cluster === d) return;
+        if (cluster === d) { return; }
         let x = d.x - cluster.x;
         let y = d.y - cluster.y;
         let l = Math.sqrt(x * x + y * y);
@@ -98,7 +118,7 @@ export class BubbleChartComponent implements OnInit {
       };
     }
 
-// Resolves collisions between d and all other circles.
+    // Resolves collisions between d and all other circles.
     function collide(alpha) {
       const quadtree = d3.quadtree()
         .x((d) => d.x)
@@ -131,20 +151,13 @@ export class BubbleChartComponent implements OnInit {
       };
     }
 
-// function called once promise is resolved and data is loaded from csv
-// calls bubble chart function to display inside #vis div
+    // function called once promise is resolved and data is loaded from csv
+    // calls bubble chart function to display inside #vis div
     function initData(data) {
       const newData = data.map(item => {
         return {name: item.name, population: item.population, region: item.region};
       });
       console.log(newData);
     }
-
-// load data
-    d3.json('https://restcountries.eu/rest/v2/all').then(initData);
-
-
   }
-
-
 }

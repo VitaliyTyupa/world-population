@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {FiltersPanelComponent} from '../shared/filters-panel/filters-panel.component';
+import {CountriesDataService} from "../shared/core-services/countries-data.service";
 
 @Component({
   selector: 'wp-layout-main',
@@ -7,9 +9,29 @@ import { Component, OnInit } from '@angular/core';
 })
 export class LayoutMainComponent implements OnInit {
 
-  constructor() { }
+  @ViewChild(FiltersPanelComponent) filters;
+
+  public isOpened = false;
+
+  constructor(
+    private countriesDataService: CountriesDataService
+  ) { }
 
   ngOnInit() {
+    this.countriesDataService.initialize();
+  }
+
+  public closeSideNav() {
+    this.isOpened = false;
+  }
+
+  public  openSideNav() {
+    this.isOpened = true;
+  }
+
+  openFilters() {
+    this.filters.filterDisplay = 'block';
+    this.closeSideNav();
   }
 
 }

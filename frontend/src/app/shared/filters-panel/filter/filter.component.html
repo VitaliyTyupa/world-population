@@ -1,0 +1,39 @@
+<div class="filter-container">
+    <header>
+        <span>{{group.title}}s</span>
+    </header>
+    <div class="filter-content">
+        <div class="search-field">
+            <label>
+                <input type="search" [placeholder]="'Find ' + group.title" [(ngModel)]="searchText">
+            </label>
+        </div>
+        <perfect-scrollbar>
+            <div class="list-wrapper">
+                <ul class="list-selected">
+                    <li class="selected" *ngFor="let key Of group.filterKeys" (click)="unselect(key)">
+                        <span *ngIf="group.groupName === 'date'" [class]="group.groupName">
+                        {{key | date: 'd MMM y'}}
+                          <mat-icon>cancel</mat-icon>
+                    </span>
+                        <span *ngIf="group.groupName !== 'date'" [class]="group.groupName">
+                        {{key}}
+                          <mat-icon>cancel</mat-icon>
+                    </span>
+
+                    </li>
+                </ul>
+                <ul class="list-values">
+                    <li class="value" *ngFor="let value Of group.values | filter: searchText"
+                        (click)="select(value)">
+                    <span *ngIf="group.groupName === 'date'" [class]="group.groupName">
+                        {{value | date:  'd MMM y'}}
+                    </span>
+                        <span *ngIf="group.groupName !== 'date'" [class]="group.groupName" [innerHTML]="value">
+                    </span>
+                    </li>
+                </ul>
+            </div>
+        </perfect-scrollbar>
+    </div>
+</div>
