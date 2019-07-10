@@ -23,14 +23,31 @@ export class BubbleChartComponent implements OnInit {
 
   ngOnInit() {
     this.countriesDataService.$countries.subscribe(countries => {
-      console.log(countries);
       this.data.length = 0;
       this.data.push(...countries);
       d3.select('svg').selectAll('circle').remove();
-      console.log(this.countriesDataService.regions);
       this.drawChart(this.data, this.countriesDataService.regions);
     });
 
+  }
+
+  private initCluster(region) {
+    switch (region) {
+      case 'Asia':
+        return 1;
+      case 'Europe':
+        return 2;
+      case 'Africa':
+        return 3;
+      case 'Oceania':
+        return 4;
+      case 'Americas':
+        return 5;
+      case 'Polar':
+        return 6;
+      case '':
+        return 7;
+    }
   }
 
   private drawChart(data, regions) {
@@ -49,9 +66,9 @@ export class BubbleChartComponent implements OnInit {
     // The largest node for each cluster.
     const clusters = new Array(m);
 
-    const nodes = data.map(() => {
-      const i = Math.floor(Math.random() * m);
-      const r = Math.sqrt((i + 1) / m * -Math.log(Math.random())) * maxRadius;
+    const nodes = d3.range(n).map((index) => {
+      const i = this.initCluster(data[index].region);
+      const r = data[index].population / 10000000;
       const d = {cluster: i, radius: r};
       if (!clusters[i] || (r > clusters[i].radius)) { clusters[i] = d; }
       return d;
@@ -80,7 +97,12 @@ export class BubbleChartComponent implements OnInit {
     const node = svg.selectAll('circle')
       .data(nodes)
       .enter().append('circle')
-      .style('fill', (d) => color(d.cluster));
+      .style('fill', (d) => color(d.cluster))
+      .on('mouseenter', (country) => {
+        const i = country.index;
+        console.log(data[i].name);
+      })
+    ;
     //     .call(force.drag);
 
     node.transition()
