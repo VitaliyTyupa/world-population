@@ -27,7 +27,9 @@ export class LoginComponent implements OnInit {
 
   public onSubmit() {
     const formData = this.form.value;
-    this.userService.validateUserByEmail(formData.email, formData.password).subscribe(response => {
+    const user = JSON.stringify({"email": formData.email, "password": formData.password}) ;
+
+    this.userService.validateUser(user).subscribe(response => {
         console.log(response);
       },
       error => {
