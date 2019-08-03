@@ -26,5 +26,12 @@ export class UsersService {
      })
    )
   }
+  validateUser(params): Observable<any> {
+    return this.api.authorization(params);
+  }
+
+  registrationUser(params: any): Observable<any> {
+    return this.api.registration(params);
+  }
 
 }

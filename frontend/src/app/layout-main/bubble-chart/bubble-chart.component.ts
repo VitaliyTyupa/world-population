@@ -25,6 +25,7 @@ export class BubbleChartComponent implements OnInit {
     this.countriesDataService.$countries.subscribe(countries => {
       this.data.length = 0;
       this.data.push(...countries);
+      console.log(this.data);
       d3.select('svg').selectAll('circle').remove();
       this.drawChart(this.data, this.countriesDataService.regions);
     });
