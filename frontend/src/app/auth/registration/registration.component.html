@@ -54,19 +54,20 @@
            type="password"
            placeholder="Confirm password"
            formControlName="confirmPassword">
-    <mat-hint class="form-help-text" *ngIf="profileForm.get('confirmPassword').invalid && profileForm.get('confirmPassword').touched">
+    <mat-hint class="form-help-text" *ngIf="profileForm.get('confirmPassword').invalid && profileForm.get('confirmPassword').touched || profileForm.value.password !== profileForm.value.confirmPassword">
       <span *ngIf="profileForm.get('confirmPassword')['errors']['profileFormrequired']">Password can not be empty!</span>
       <span *ngIf="profileForm.get('confirmPassword')['errors']['minlength']">
         Enter password must be more longer than {{profileForm.get('confirmPassword')['errors']['minlength']['requiredLength']}} chars!
         Now {{profileForm.get('confirmPassword')['errors']['minlength']['actualLength']}}.
       </span>
+      <span *ngIf="profileForm.value.password !== profileForm.value.confirmPassword">Try again! Repeat password for confirm</span>
     </mat-hint>
   </mat-form-field>
 
   <button mat-raised-button
           type="submit"
           class="btn-submit"
-          [disabled]="profileForm.invalid">
+          [disabled]="profileForm.invalid || profileForm.value.password !== profileForm.value.confirmPassword">
     Enter
   </button>
 
@@ -74,3 +75,4 @@
     <a routerLink="/">На главную страницу</a>
   </p>
 </form>
+<wp-notification *ngIf="error.isShow">{{error.message}}</wp-notification>

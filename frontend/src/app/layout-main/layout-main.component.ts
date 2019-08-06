@@ -1,6 +1,7 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {FiltersPanelComponent} from '../shared/filters-panel/filters-panel.component';
 import {CountriesDataService} from "../shared/core-services/countries-data.service";
+import {AuthService} from "../shared/core-services/auth.service";
 
 @Component({
   selector: 'wp-layout-main',
@@ -14,7 +15,8 @@ export class LayoutMainComponent implements OnInit {
   public isOpened = false;
 
   constructor(
-    private countriesDataService: CountriesDataService
+    private countriesDataService: CountriesDataService,
+    public auth: AuthService
   ) { }
 
   ngOnInit() {
