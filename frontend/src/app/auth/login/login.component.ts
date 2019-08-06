@@ -1,6 +1,8 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {UsersService} from '../../shared/core-services/users.service';
+import {AuthService} from '../../shared/core-services/auth.service';
+import {Subscription} from 'rxjs';
+import {ActivatedRoute, Params, Router} from '@angular/router';
 
 
 @Component({
@@ -8,13 +10,17 @@ import {UsersService} from '../../shared/core-services/users.service';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
 
   form: FormGroup;
   error: { isShow: boolean, message: string } = {isShow: false, message: ''};
 
+  private subscriptions: { [key: string]: Subscription } = {};
+
   constructor(
-    private userService: UsersService,
+    private auth: AuthService,
+    private router: Router,
+    private route: ActivatedRoute
   ) {
   }
 
@@ -23,16 +29,35 @@ export class LoginComponent implements OnInit {
       email: new FormControl(null, [Validators.required, Validators.email]),
       password: new FormControl(null, [Validators.required, Validators.minLength(6)])
     });
+
+    this.subscriptions['route'] = this.route.queryParams.subscribe((params: Params) => {
+      if (params['registered']) {
+
+      } else if (params['accessDenied']) {
+
+      }
+    })
+  }
+
+  ngOnDestroy(): void {
+    if (this.subscriptions) {
+      for (let id in this.subscriptions) {
+        this.subscriptions[id].unsubscribe();
+      }
+    }
   }
 
   public onSubmit() {
-    const formData = this.form.value;
-    const user = JSON.stringify({"email": formData.email, "password": formData.password}) ;
+    this.form.disable();
+    const user = {
+      email: this.form.value.email,
+      password: this.form.value.password
+    };
 
-    this.userService.validateUser(user).subscribe(response => {
-        console.log(response);
-      },
+    this.subscriptions['auth'] = this.auth.login(user).subscribe(
+      () => this.router.navigate(['/']),
       error => {
+        this.form.enable();
         this.error = {isShow: true, message: error.message};
         this.clearError();
       });
@@ -41,6 +66,6 @@ export class LoginComponent implements OnInit {
   private clearError() {
     setTimeout(() => {
       this.error = {isShow: false, message: ''};
-    }, 3000);
+    }, 5000);
   }
 }

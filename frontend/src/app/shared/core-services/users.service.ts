@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import {Observable, throwError} from "rxjs";
-import {catchError, map} from "rxjs/operators";
-import {ApiService} from "./api.service";
-import {error} from "@angular/compiler/src/util";
+import {Observable, throwError} from 'rxjs';
+import {ApiService} from './api.service';
+import {catchError} from 'rxjs/operators';
+
 
 
 @Injectable({
@@ -11,27 +11,5 @@ import {error} from "@angular/compiler/src/util";
 export class UsersService {
 
   constructor(private api: ApiService) { }
-
-  validateUserByEmail(email: string, password: string): Observable<any> {
-   return this.api.getUserByEmail(email).pipe(
-     map(user => {
-     if(user.password === password) {
-       return true;
-     } else {
-       throw new Error('you sent an incorrect password')
-     }
-    }),
-     catchError(error => {
-       return throwError(error)
-     })
-   )
-  }
-  validateUser(params): Observable<any> {
-    return this.api.authorization(params);
-  }
-
-  registrationUser(params: any): Observable<any> {
-    return this.api.registration(params);
-  }
 
 }

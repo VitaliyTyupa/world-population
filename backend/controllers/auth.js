@@ -2,10 +2,9 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const keys = require('../config/keys');
-
+const errorHandler = require('../utils/errorHandler');
 
 module.exports.login = async (req, res) => {
-
     const candidate = await User.findOne({email: req.body.email});
     if(candidate) {
         const passwordResult = bcrypt.compareSync(req.body.password, candidate.password);
@@ -45,9 +44,11 @@ module.exports.register = async (req, res) => {
         });
         try {
             await user.save().then(()=>{console.log('save Ok!')});
-            res.status(201).json(user)
+            res.status(201).json({
+                message: 'ok'
+            })
         } catch (e) {
-            console.log('===========', e.message);
+            errorHandler(res, e)
         }
 
     }

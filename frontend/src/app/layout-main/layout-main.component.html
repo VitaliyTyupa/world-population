@@ -27,8 +27,8 @@
         <a class="title-link">World population</a>
       </h1>
       <span class="toolbar-filler"></span>
-      <button id="button-login" mat-button [routerLink]="['auth/login']">Log In</button>
-      <button id="button-logout" mat-button>Log Out</button>
+      <button *ngIf="!auth.isAuthenticateted()" id="button-login" mat-button [routerLink]="['auth/login']">Log In</button>
+      <button *ngIf="auth.isAuthenticateted()" id="button-logout" mat-button (click)="auth.logout()">Log Out</button>
     </mat-toolbar>
     <wp-bubble-chart></wp-bubble-chart>
   </mat-sidenav-content>

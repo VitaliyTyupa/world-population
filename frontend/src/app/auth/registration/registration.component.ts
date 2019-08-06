@@ -1,14 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, Validators} from '@angular/forms';
-import {UsersService} from "../../shared/core-services/users.service";
-import {logger} from "codelyzer/util/logger";
+import {AuthService} from '../../shared/core-services/auth.service';
+import {ActivatedRoute, Router} from "@angular/router";
+import {Subscription} from "rxjs";
+
 
 @Component({
   selector: 'wp-registration',
   templateUrl: './registration.component.html',
   styleUrls: ['./registration.component.scss']
 })
-export class RegistrationComponent implements OnInit {
+export class RegistrationComponent implements OnInit, OnDestroy {
 
   profileForm = this.fb.group({
     logName: ['', [Validators.required, Validators.minLength(2)]],
@@ -17,24 +19,50 @@ export class RegistrationComponent implements OnInit {
     confirmPassword: ['', [Validators.required, Validators.minLength(8)]]
   });
 
+  error: { isShow: boolean, message: string } = {isShow: false, message: ''};
+  private subscriptions: { [key: string]: Subscription } = {};
+
   constructor(
     private fb: FormBuilder,
-    private userService: UsersService
+    private auth: AuthService,
+    private router: Router,
+    private route: ActivatedRoute
     ) { }
 
   ngOnInit() {
 
   }
 
+  ngOnDestroy(): void {
+    if (this.subscriptions) {
+      for (let id in this.subscriptions) {
+        this.subscriptions[id].unsubscribe();
+      }
+    }
+  }
+
   public onSubmit() {
-    console.log(this.profileForm.value);
+    this.profileForm.disable();
     const user = {
-      "email": this.profileForm.value.email,
-      "password": this.profileForm.value.password
+      email: this.profileForm.value.email,
+      password: this.profileForm.value.password
     };
-    console.log(user);
-    this.userService.registrationUser(user).subscribe(item => {
-      console.log(item);
-    })
+    this.subscriptions['register'] = this.auth.register(user).subscribe(
+      () => {
+        this.router.navigate(['auth/login'], {queryParams: {
+          registered: true
+          }});
+      },
+      error => {
+        this.error = {isShow: true, message: error.message};
+        this.clearError();
+        this.profileForm.enable();
+      });
+  }
+
+  private clearError() {
+    setTimeout(() => {
+      this.error = {isShow: false, message: ''};
+    }, 5000);
   }
 }
